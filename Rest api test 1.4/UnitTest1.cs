@@ -1111,7 +1111,7 @@ namespace Rest_api_test_1._4
         }
 
         public static int templId;
-        /* НУЖНЫ ШАБЛОНЫ
+        /* Нужны шаблоны
         [Test]
         public void GETTempl()
         {
