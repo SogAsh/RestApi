@@ -48,7 +48,7 @@ namespace Rest_api_test_1._4
         public static int departmentId;
 
         [Test]
-        public void POSTDepartment()
+        public void  POSTDepartment()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -79,7 +79,7 @@ namespace Rest_api_test_1._4
 
         public static int orgstructureDeleteId;
         [Test]
-        public void POSTOrgstructureForDelete()
+        public async void POSTOrgstructureForDelete()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -95,7 +95,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response =  BaseMethods.GetResponse(client, request);
 
             var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
             orgstructureDeleteId = Orgstructure.id;
@@ -781,11 +781,11 @@ namespace Rest_api_test_1._4
             var response = BaseMethods.GetResponse(client, request);
 
             //Не десериализует
-            //var UserPermissions = JsonConvert.DeserializeObject<UserPermissions>(response.Content);
-            //Assert.That(UserPermissions.perm_code, Is.EqualTo("RL_FULL_ACCESS"), "user name is nor correct");
+            var UserPermissions = JsonConvert.DeserializeObject<UserPermissions[]>(response.Content);
+            Assert.That(UserPermissions[1].perm_code, Is.EqualTo("RL_FULL_ACCESS"), "user name is nor correct");
 
-            //string actualtext = GetObject.GetUserName(BaseData.UserRoot);
-            //Assert.AreEqual(BaseData.UserRoot, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
+            string actualtext = GetObject.GetUserName(BaseData.UserRoot);
+            Assert.AreEqual(BaseData.UserRoot, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
 
         }
 

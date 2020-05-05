@@ -87,14 +87,14 @@ namespace Rest_api_test_1._4
             npgSqlConnection.Close();
         }
 
-        public static IRestResponse GetResponse(RestClient client, RestRequest request)
+        public static  IRestResponse GetResponse(RestClient client, RestRequest request)
         {
             var response = client.Execute(request);
             Console.WriteLine(response.IsSuccessful);
             Console.WriteLine(response.StatusCode);
             Console.WriteLine(response.ErrorMessage);
             Console.WriteLine(response.ErrorException);
-            return response;
+            return response; 
         }
 
     }
