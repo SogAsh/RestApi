@@ -8,6 +8,7 @@ using RestSharp.Authenticators;
 using Models;
 using Newtonsoft.Json;
 using System.Net;
+using System.Text;
 
 namespace Rest_api_test_1._4
 {
@@ -18,7 +19,7 @@ namespace Rest_api_test_1._4
         public static string orgstructureName;
 
         [Test]
-        public void POSTOrgstructure()
+        public async Task POSTOrgstructure()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -34,7 +35,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
             orgstructureId = Orgstructure.id;
@@ -48,7 +49,7 @@ namespace Rest_api_test_1._4
         public static int departmentId;
 
         [Test]
-        public void POSTDepartment()
+        public async Task POSTDepartment()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -67,7 +68,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
             departmentId = Orgstructure.id;
@@ -79,7 +80,7 @@ namespace Rest_api_test_1._4
 
         public static int orgstructureDeleteId;
         [Test]
-        public void POSTOrgstructureForDelete()
+        public async Task POSTOrgstructureForDelete()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -95,7 +96,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
             orgstructureDeleteId = Orgstructure.id;
@@ -108,7 +109,7 @@ namespace Rest_api_test_1._4
         public static int departmentDeleteId;
 
         [Test]
-        public void POSTDepartmentForDelete()
+        public async Task POSTDepartmentForDelete()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -127,7 +128,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
             departmentDeleteId = Orgstructure.id;
@@ -140,7 +141,7 @@ namespace Rest_api_test_1._4
         public static int employeeId;
 
         [Test]
-        public void POSTEmployee()
+        public async Task POSTEmployee()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -164,7 +165,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Employee = JsonConvert.DeserializeObject<Employee>(response.Content);
             employeeId = Employee.id;
@@ -177,7 +178,7 @@ namespace Rest_api_test_1._4
         public static int employeeDeleteid;
 
         [Test]
-        public void POSTEmployeeForDelete()
+        public async Task POSTEmployeeForDelete()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -201,7 +202,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Employee = JsonConvert.DeserializeObject<Employee>(response.Content);
             employeeDeleteid = Employee.id;
@@ -212,7 +213,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void GETOrgstructure()
+        public async Task GETOrgstructure()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -221,7 +222,7 @@ namespace Rest_api_test_1._4
             POSTOrgstructure();
             var request = new RestRequest("orgstructure/", Method.GET);
             request.AddHeader("Accept", "application/json");
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Orgstructure>>(response.Content);
             var name = rootObject.results[0].name;
@@ -231,7 +232,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void GETOrgstructureId()
+        public async Task GETOrgstructureId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -242,7 +243,7 @@ namespace Rest_api_test_1._4
 
             POSTOrgstructure();
             request.AddUrlSegment("orgstructureid", orgstructureId);
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
             Assert.That(Orgstructure.name, Is.EqualTo(BaseData.Company_Name), "orgstructure name is nor correct");
@@ -252,7 +253,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void PUTOrgstructureId()
+        public async Task PUTOrgstructureId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -270,7 +271,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
             Assert.That(Orgstructure.name, Is.EqualTo(BaseData.Company_Name2), "orgstructure name is nor correct");
@@ -280,7 +281,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void PUTDepartmentId()
+        public async Task PUTDepartmentId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -300,7 +301,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
             Assert.That(Orgstructure.name, Is.EqualTo(BaseData.Departmanet_Name1), "orgstructure name is nor correct");
@@ -310,7 +311,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void PATCHOrgstructureId()
+        public async Task PATCHOrgstructureId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -329,7 +330,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
             Assert.That(Orgstructure.name, Is.EqualTo(BaseData.Company_Name3), "orgstructure name is nor correct");
@@ -339,7 +340,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void PATCHDepartmentId()
+        public async Task PATCHDepartmentId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -359,7 +360,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
             Assert.That(Orgstructure.name, Is.EqualTo(BaseData.Departmanet_Name2), "orgstructure name is nor correct");
@@ -369,7 +370,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void DELETEOrgstructureId()
+        public async Task DELETEOrgstructureId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -382,7 +383,7 @@ namespace Rest_api_test_1._4
             POSTOrgstructureForDelete();
             request.AddUrlSegment("orgstructureid", orgstructureDeleteId);
 
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
             Assert.IsNull(Orgstructure, "orgstructure name is nor correct");
@@ -392,7 +393,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void DELETEDepartmentId()
+        public async Task DELETEDepartmentId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -403,7 +404,7 @@ namespace Rest_api_test_1._4
 
             POSTDepartmentForDelete();
             request.AddUrlSegment("orgstructureid", departmentDeleteId);
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
             Assert.IsNull(Orgstructure, "orgstructure name is nor correct");
@@ -413,7 +414,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void GETEmployee()
+        public async Task GETEmployee()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -422,7 +423,7 @@ namespace Rest_api_test_1._4
             POSTEmployee();
             var request = new RestRequest("employee/", Method.GET);
             request.AddHeader("Accept", "application/json");
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Employee>>(response.Content);
             var last_name = rootObject.results[0].last_name;
@@ -434,7 +435,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void GETEmployeeId()
+        public async Task GETEmployeeId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -445,7 +446,7 @@ namespace Rest_api_test_1._4
 
             POSTEmployee();
             request.AddUrlSegment("employeeid", employeeId);
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Employee = JsonConvert.DeserializeObject<Employee>(response.Content);
             Assert.That(Employee.last_name, Is.EqualTo(BaseData.Employee_Last_Name1), "employee name is nor correct");
@@ -455,7 +456,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void PUTEmployeeId()
+        public async Task PUTEmployeeId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -480,7 +481,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Employee = JsonConvert.DeserializeObject<Employee>(response.Content);
             Assert.That(Employee.last_name, Is.EqualTo(BaseData.Employee_Last_Name2), "orgstructure name is nor correct"); //правильно ли диссериализовалось
@@ -490,7 +491,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void PATCHEmployeeId()
+        public async Task PATCHEmployeeId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -513,7 +514,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Employee = JsonConvert.DeserializeObject<Employee>(response.Content);
             Assert.That(Employee.last_name, Is.EqualTo(BaseData.Employee_Last_Name3), "orgstructure name is nor correct"); //правильно ли диссериализовалось
@@ -523,7 +524,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void DELETEEmployeeId()
+        public async Task DELETEEmployeeId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -535,7 +536,7 @@ namespace Rest_api_test_1._4
             POSTCleanerEmployee();
             POSTEmployeeForDelete();
             request.AddUrlSegment("employeeid", employeeDeleteid);
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Employee = JsonConvert.DeserializeObject<Employee>(response.Content);
             Assert.IsNull(Employee, "Employee is not null");
@@ -543,33 +544,12 @@ namespace Rest_api_test_1._4
             string actualtext = GetObject.GetDeletedEmployee(BaseData.Employee_Full_Name4);
             Assert.IsEmpty(actualtext, "В БД studio название name of orgstructure имеет некорректное название");
         }
-
-        /* Не десеалиризизует фото
-        [Test]
-        public void GETEmployeeIdPhoto() 
-        {
-            var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
-            BaseMethods.DisableCheckCertificate();
-
-            var request = new RestRequest("employee/{employeeid}/photo", Method.GET);
-            request.AddHeader("Accept", "application/json");
-           
-            GETEmployee();
-            request.AddUrlSegment("employeeid", employeeId);
-            var response = BaseMethods.GetResponse(client, request);
-
-            var Employee = JsonConvert.DeserializeObject<Employee>(response.Content);
-            Assert.That(Employee.photo_preview, Is.EqualTo(BaseData.Employee_Photo1), "employee name is nor correct");
-        }
-        */
-
-
+        
         public static int jobId;
         public static string jobName;
 
         [Test]
-        public void POSTJob()
+        public async Task POSTJob()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -586,7 +566,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Job = JsonConvert.DeserializeObject<Job>(response.Content);
             jobId = Job.id;
@@ -600,7 +580,7 @@ namespace Rest_api_test_1._4
         public static int jobDeletedId;
 
         [Test]
-        public void POSTJobForDelete()
+        public async Task POSTJobForDelete()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -617,7 +597,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Job = JsonConvert.DeserializeObject<Job>(response.Content);
             jobDeletedId = Job.id;
@@ -630,7 +610,7 @@ namespace Rest_api_test_1._4
         public static int jobDeletedId2;
 
         [Test]
-        public void POSTJobForDelete2()
+        public async Task POSTJobForDelete2()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -647,7 +627,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Job = JsonConvert.DeserializeObject<Job>(response.Content);
             jobDeletedId2 = Job.id;
@@ -658,7 +638,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void GETJob()
+        public async Task GETJob()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -667,7 +647,7 @@ namespace Rest_api_test_1._4
             POSTJob();
             var request = new RestRequest("job/", Method.GET);
             request.AddHeader("Accept", "application/json");
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Job>>(response.Content);
             var name = rootObject.results[0].name;
@@ -678,7 +658,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void GETJobId()
+        public async Task GETJobId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -689,7 +669,7 @@ namespace Rest_api_test_1._4
 
             POSTJob();
             request.AddUrlSegment("jobid", jobId);
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Job = JsonConvert.DeserializeObject<Job>(response.Content);
             Assert.That(Job.name, Is.EqualTo(BaseData.Position1), "job name is nor correct");
@@ -699,7 +679,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void DELETEJobId()
+        public async Task DELETEJobId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -712,7 +692,7 @@ namespace Rest_api_test_1._4
             POSTJobForDelete();
             request.AddUrlSegment("jobid", jobDeletedId);
 
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Job = JsonConvert.DeserializeObject<Job>(response.Content);
             Assert.IsNull(Job, "job name is nor correct");
@@ -722,9 +702,10 @@ namespace Rest_api_test_1._4
         }
 
         public static int userId;
+        public static dynamic permissionArr;
 
         [Test]
-        public void GETUser()
+        public async Task GETUser()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -732,12 +713,13 @@ namespace Rest_api_test_1._4
 
             var request = new RestRequest("users/", Method.GET);
             request.AddHeader("Accept", "application/json");
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<User>>(response.Content);
             var id = rootObject.results[0].id;
             var login = rootObject.results[0].login;
             userId = id;
+            permissionArr = rootObject.results;
             Assert.That(login, Is.EqualTo(BaseData.UserRoot), "job name is nor correct");
 
             string actualtext = GetObject.GetUserName(BaseData.UserRoot);
@@ -745,7 +727,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void GETUserId()
+        public async Task GETUserId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -756,7 +738,7 @@ namespace Rest_api_test_1._4
 
             GETUser();
             request.AddUrlSegment("usersid", userId);
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var User = JsonConvert.DeserializeObject<User>(response.Content);
             Assert.That(User.login, Is.EqualTo(BaseData.UserRoot), "job name is nor correct");
@@ -766,33 +748,33 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void GETUserIdPermissions()
+        public async Task GETUserIdPermissions()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
+            GETUser();
+            
             var request = new RestRequest("users/{userid}/permissions", Method.GET);
             request.AddHeader("Accept", "application/json");
 
-            GETUser();
             request.AddUrlSegment("userid", userId);
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
-            //Не десериализует
-            //var UserPermissions = JsonConvert.DeserializeObject<UserPermissions>(response.Content);
-            //Assert.That(UserPermissions.perm_code, Is.EqualTo("RL_FULL_ACCESS"), "user name is nor correct");
-
-            //string actualtext = GetObject.GetUserName(BaseData.UserRoot);
-            //Assert.AreEqual(BaseData.UserRoot, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
-
+            var UserPermissions = JsonConvert.DeserializeObject<UserPermissions[]>(response.Content);
+            for (int i = 0; i < UserPermissions.Length; i++)
+            {
+                string actualtext = GetObject.GetUserName(BaseData.UserRoot);
+                Assert.AreEqual(BaseData.UserRoot, actualtext, "В БД studio название name of orgstructure имеет некорректное название");  
+            } 
         }
 
         public static int deviceid;
 
         [Test]
-        public void GETDevices()
+        public async Task GETDevices()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -800,7 +782,7 @@ namespace Rest_api_test_1._4
 
             var request = new RestRequest("devices/", Method.GET);
             request.AddHeader("Accept", "application/json");
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Devices>>(response.Content);
             var port = rootObject.results[0].port;
@@ -812,7 +794,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void GETDevicesId()
+        public async Task GETDevicesId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -823,7 +805,7 @@ namespace Rest_api_test_1._4
 
             GETDevices();
             request.AddUrlSegment("deviceid", deviceid);
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Devices = JsonConvert.DeserializeObject<Devices>(response.Content);
             Assert.That(Devices.port, Is.EqualTo(BaseData.Device_Port), "user name is nor correct");
@@ -836,7 +818,7 @@ namespace Rest_api_test_1._4
         public static int checkpointid;
 
         [Test]
-        public void GETCheckpoint()
+        public async Task GETCheckpoint()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -844,7 +826,7 @@ namespace Rest_api_test_1._4
 
             var request = new RestRequest("checkpoint", Method.GET);
             request.AddHeader("Accept", "application/json");
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Checkpoint>>(response.Content);
             var checkpointName = rootObject.results[0].name;
@@ -858,7 +840,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void GETCheckpointId()
+        public async Task GETCheckpointId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -869,7 +851,7 @@ namespace Rest_api_test_1._4
 
             GETCheckpoint();
             request.AddUrlSegment("checkpointid", checkpointid);
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var checkpoint = JsonConvert.DeserializeObject<Checkpoint>(response.Content);
             Assert.That(checkpoint.name, Is.EqualTo(BaseData.Checkpoint_Name), "user name is nor correct");
@@ -881,7 +863,7 @@ namespace Rest_api_test_1._4
         public static string eventTime;
 
         [Test]
-        public void POSTCheckpointIdEvent()
+        public async Task POSTCheckpointIdEvent()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("test@mail.ru", "1");
@@ -900,7 +882,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var checkpoint = JsonConvert.DeserializeObject<Checkpoint>(response.Content);
             string actualtext = GetObject.GetCheckpoint(BaseData.Checkpoint_Name);
@@ -911,7 +893,7 @@ namespace Rest_api_test_1._4
         public static dynamic reportArr;
 
         [Test]
-        public void GETReport()
+        public async Task GETReport()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -920,7 +902,7 @@ namespace Rest_api_test_1._4
             var request = new RestRequest("report/", Method.GET);
             request.AddHeader("Accept", "application/json");
 
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Report>>(response.Content);
             var name = rootObject.results[0].name;
@@ -933,7 +915,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void GETReportId()
+        public async Task GETReportId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -946,7 +928,7 @@ namespace Rest_api_test_1._4
                 request.AddUrlSegment("reportid", report.id);
 
                 request.AddHeader("Accept", "application/json");
-                var response = BaseMethods.GetResponse(client, request);
+                var response = await BaseMethods.GetResponse(client, request);
 
                 var reportresult = JsonConvert.DeserializeObject<Report>(response.Content);
                 Assert.That(reportresult.name, Is.EqualTo(report.name), "report name is nor correct");
@@ -957,7 +939,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void POSTCleanerJob()
+        public async Task POSTCleanerJob()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -973,7 +955,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Job = JsonConvert.DeserializeObject<Job>(response.Content);
             Assert.IsNull(Job, "orgstructure name is nor correct");
@@ -983,7 +965,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void POSTCleanerEmployee()
+        public async Task POSTCleanerEmployee()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -999,7 +981,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Employee = JsonConvert.DeserializeObject<Employee>(response.Content);
             Assert.IsNull(Employee, "orgstructure name is nor correct");
@@ -1009,7 +991,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void POSTCleanerOrgstructure()
+        public async Task POSTCleanerOrgstructure()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -1025,7 +1007,7 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
             Assert.IsNull(Orgstructure, "orgstructure name is nor correct");
@@ -1037,7 +1019,7 @@ namespace Rest_api_test_1._4
         public static string token;
 
         [Test]
-        public void POSTAuthLogin()
+        public async Task POSTAuthLogin()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -1046,7 +1028,7 @@ namespace Rest_api_test_1._4
             GETUser();
             var request = new RestRequest("auth/login", Method.POST);
             request.AddHeader("Accept", "application/json");
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Login = JsonConvert.DeserializeObject<Login>(response.Content);
             token = Login.token;
@@ -1057,7 +1039,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void POSTAuthLogout()
+        public async Task POSTAuthLogout()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -1066,13 +1048,13 @@ namespace Rest_api_test_1._4
             POSTAuthLogin();
             var request = new RestRequest("auth/logout", Method.POST);
             request.AddHeader("Accept", "application/json");
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
         }
 
         public static int eventId;
 
         [Test]
-        public void GETLogs()
+        public async Task GETLogs()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -1081,7 +1063,7 @@ namespace Rest_api_test_1._4
             POSTCheckpointIdEvent();
             var request = new RestRequest("logs/", Method.GET);
             request.AddHeader("Accept", "application/json");
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Logs>>(response.Content);
             var name = rootObject.results[0].time;
@@ -1092,7 +1074,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void GETLogsId()
+        public async Task GETLogsId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -1102,7 +1084,7 @@ namespace Rest_api_test_1._4
             var request = new RestRequest("logs/{logsid}/", Method.GET);
             request.AddUrlSegment("logsid", eventId);
             request.AddHeader("Accept", "application/json");
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Logs = JsonConvert.DeserializeObject<Logs>(response.Content);
 
@@ -1111,9 +1093,9 @@ namespace Rest_api_test_1._4
         }
 
         public static int templId;
-        /* Нужны шаблоны
+        /* Нужны шаблоны в программе для выполнения метода
         [Test]
-        public void GETTempl()
+        public async Task GETTempl()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -1122,7 +1104,7 @@ namespace Rest_api_test_1._4
             POSTEmployee();
             var request = new RestRequest("templ/", Method.GET);
             request.AddHeader("Accept", "application/json");
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Templ>>(response.Content);
             var employeeName = rootObject.results[0].employee.ToString();
@@ -1133,7 +1115,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void GETTemplId()
+        public async Task GETTemplId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -1144,7 +1126,7 @@ namespace Rest_api_test_1._4
             var request = new RestRequest("templ/{templid}/", Method.GET);
             request.AddUrlSegment("templid", templId);
             request.AddHeader("Accept", "application/json");
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Templ = JsonConvert.DeserializeObject<Templ>(response.Content);
             var employeeName = Templ.employee.ToString();
@@ -1157,7 +1139,7 @@ namespace Rest_api_test_1._4
         public static string uuidId;
 
         [Test]
-        public void POSTWorktimePresence()
+        public async Task POSTWorktimePresence()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -1174,14 +1156,14 @@ namespace Rest_api_test_1._4
             });
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Worktime = JsonConvert.DeserializeObject<Worktime>(response.Content);
             uuidId = Worktime.uuid;
         }
 
         [Test]
-        public void GETWorktimePresenceResult()
+        public async Task GETWorktimePresenceResult()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -1194,7 +1176,7 @@ namespace Rest_api_test_1._4
             request.AddParameter("uuid", uuidId);
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Summary = JsonConvert.DeserializeObject<Summary>(response.Content);
             var totalCount = Summary.total_count.ToString();
@@ -1204,7 +1186,7 @@ namespace Rest_api_test_1._4
         }
 
         [Test]
-        public void GETWorktimeStatus()
+        public async Task GETWorktimeStatus()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
@@ -1217,7 +1199,7 @@ namespace Rest_api_test_1._4
             request.AddParameter("uuid", uuidId);
 
             request.RequestFormat = DataFormat.Json;
-            var response = BaseMethods.GetResponse(client, request);
+            var response = await BaseMethods.GetResponse(client, request);
 
             var Status = JsonConvert.DeserializeObject<Status>(response.Content);
             var status = Status.status;

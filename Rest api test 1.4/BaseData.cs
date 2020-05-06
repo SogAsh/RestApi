@@ -5,7 +5,7 @@ using System.Text;
 namespace Rest_api_test_1._4
 {
     public static class BaseData
-{
+	{
 		#region Company
 		public const string Company_Name = "Company"; 
 		public const string Company_Depnum = "100"; 
@@ -27,26 +27,33 @@ namespace Rest_api_test_1._4
 		public const string Departmanet_Name2 = "Big Department"; 
 		public const string Departmanet_Num2 = "202"; 
 		public const string Departmanet_Name3 = "Sell Department"; 
-		public const string Departmanet_Num3 = "203"; 
+		public const string Departmanet_Num3 = "203";
+		#endregion
 
-		/* Было бы лучше так, но не знаю как на этот массив сослатся
-		public string [] names = new string[] 
+		#region names
+		public static string [] names = new string[] 
 			        {
-						"EMIS";
-						"Администрация";
-						"Бухгалтерия";
-						"Обслуживание производства";
-						"Отдел";
-						"Отдел закупок";
-						"Отдел информационных технологий";
-						"Отдел по работе с персоналом";
-						"Отдел продаж";
-						"Отдел развития упаковки";
-						"Переводчики";
-						"Транспортный отдел";
+						"EMIS",
+						"Администрация",
+						"Бухгалтерия",
+						"Обслуживание производства",
+						"Отдел",
+						"Отдел закупок",
+						"Отдел информационных технологий",
+						"Отдел по работе с персоналом",
+						"Отдел продаж",
+						"Отдел развития упаковки",
+						"Переводчики",
+						"Транспортный отдел",
 					};
-		*/
+		#endregion
 
+		#region permissionarr
+		public static string[] permissionarr = new string[]
+		{
+				"Доступ без ограничений",
+				"Выход из системы"
+		};
 		#endregion
 
 		#region Employee
@@ -121,4 +128,5 @@ namespace Rest_api_test_1._4
 		public const string Worktime = "2020-04-30T09:00:00+50:00";
 		#endregion
 	}
+
 }
