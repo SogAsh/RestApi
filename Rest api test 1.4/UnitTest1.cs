@@ -1,4 +1,4 @@
-using System;
+using System;DisableCheckCertificate
 using System.Collections.Generic;
 using RestSharp;
 using RestSharp.Serialization.Json;
@@ -772,7 +772,7 @@ namespace Rest_api_test_1._4
         }
 
         public static int deviceid;
-
+        //Добавить терминал в Biosmart studio (не фейк)
         [Test]
         public async Task GETDevices()
         {
@@ -816,7 +816,7 @@ namespace Rest_api_test_1._4
         }
 
         public static int checkpointid;
-
+        //Создать виртуальную проходную в Biosmart studio с именем "Проходная"
         [Test]
         public async Task GETCheckpoint()
         {
