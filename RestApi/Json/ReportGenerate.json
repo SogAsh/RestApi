@@ -1,0 +1,11 @@
+{
+    report_id = reportid,
+    locale = BaseData.Report_Locate,
+    format = BaseData.Report_Format,
+    params 
+        {
+        d_date_beg = BaseData.Report_Date_Beg, 
+        d_date_end = BaseData.Report_Date_End, 
+        a_workers = [employeeId]
+        }
+}

@@ -5,7 +5,7 @@ using System.Text;
 namespace Models
 {
     public class Devices
-   {
+    {
         public int id { get; set; }
         public bool online { get; set; }
         public string name { get; set; }
@@ -23,6 +23,6 @@ namespace Models
         public string auto_connect { get; set; }
         public int type { get; set; }
         public string type_name { get; set; }
-
+        public string timezoneid { get; set; }
     }
 }

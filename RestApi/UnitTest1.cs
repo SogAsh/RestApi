@@ -1,4 +1,4 @@
-using System;DisableCheckCertificate
+using System;
 using System.Collections.Generic;
 using RestSharp;
 using RestSharp.Serialization.Json;
@@ -15,6 +15,15 @@ namespace Rest_api_test_1._4
     [TestFixture]
     public class UnitTest1
     {
+        /// <Подготовка>
+        ///Выполните действия ниже для корректной работы методов (раскомментируйте методы если они закомментированы)
+        //////Установите пароль в Biosmart studio = 0
+        ///Добавить терминал в Biosmart studio (не фейк) для GETDevices()
+        ///Создать виртуальную проходную в Biosmart studio с именем "Проходная" для GETCheckpoint()
+        ///Нужно создать сотрудника и связанного пользлователя test@mail.ru с паролем 1 для POSTCheckpointIdEvent()
+        ///Нужны шаблоны в программе для выполнения метода для GETTempl(), GETTemplId()
+        /// </summary>
+
         public static int orgstructureId;
         public static string orgstructureName;
 
@@ -22,11 +31,12 @@ namespace Rest_api_test_1._4
         public async Task POSTOrgstructure()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("orgstructure/", Method.POST);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             request.AddJsonBody(new
             {
@@ -37,10 +47,10 @@ namespace Rest_api_test_1._4
             request.RequestFormat = DataFormat.Json;
             var response = await BaseMethods.GetResponse(client, request);
 
-            var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
-            orgstructureId = Orgstructure.id;
-            orgstructureName = Orgstructure.name;
-            Assert.That(Orgstructure.name, Is.EqualTo(BaseData.Company_Name), "orgstructure name is nor correct");
+            var orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
+            orgstructureId = orgstructure.id;
+            orgstructureName = orgstructure.name;
+            Assert.That(orgstructure.name, Is.EqualTo(BaseData.Company_Name), "orgstructure name is nor correct");
 
             string actualtext = GetObject.GetCompany(BaseData.Company_Name);
             Assert.AreEqual(BaseData.Company_Name, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
@@ -52,11 +62,12 @@ namespace Rest_api_test_1._4
         public async Task POSTDepartment()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("orgstructure/", Method.POST);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTOrgstructure();
 
@@ -70,9 +81,9 @@ namespace Rest_api_test_1._4
             request.RequestFormat = DataFormat.Json;
             var response = await BaseMethods.GetResponse(client, request);
 
-            var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
-            departmentId = Orgstructure.id;
-            Assert.That(Orgstructure.name, Is.EqualTo(BaseData.Departmanet_Name), "orgstructure name is nor correct");
+            var orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
+            departmentId = orgstructure.id;
+            Assert.That(orgstructure.name, Is.EqualTo(BaseData.Departmanet_Name), "orgstructure name is nor correct");
 
             string actualtext = GetObject.GetDepartment(BaseData.Departmanet_Name);
             Assert.AreEqual(BaseData.Departmanet_Name, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
@@ -83,11 +94,12 @@ namespace Rest_api_test_1._4
         public async Task POSTOrgstructureForDelete()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("orgstructure/", Method.POST);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             request.AddJsonBody(new
             {
@@ -98,9 +110,9 @@ namespace Rest_api_test_1._4
             request.RequestFormat = DataFormat.Json;
             var response = await BaseMethods.GetResponse(client, request);
 
-            var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
-            orgstructureDeleteId = Orgstructure.id;
-            Assert.That(Orgstructure.name, Is.EqualTo(BaseData.Company_Name4), "orgstructure name is nor correct");
+            var orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
+            orgstructureDeleteId = orgstructure.id;
+            Assert.That(orgstructure.name, Is.EqualTo(BaseData.Company_Name4), "orgstructure name is nor correct");
 
             string actualtext = GetObject.GetCompany(BaseData.Company_Name4);
             Assert.AreEqual(BaseData.Company_Name4, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
@@ -112,11 +124,12 @@ namespace Rest_api_test_1._4
         public async Task POSTDepartmentForDelete()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("orgstructure/", Method.POST);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTOrgstructure();
 
@@ -130,98 +143,26 @@ namespace Rest_api_test_1._4
             request.RequestFormat = DataFormat.Json;
             var response = await BaseMethods.GetResponse(client, request);
 
-            var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
-            departmentDeleteId = Orgstructure.id;
-            Assert.That(Orgstructure.name, Is.EqualTo(BaseData.Departmanet_Name3), "orgstructure name is nor correct");
+            var orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
+            departmentDeleteId = orgstructure.id;
+            Assert.That(orgstructure.name, Is.EqualTo(BaseData.Departmanet_Name3), "orgstructure name is nor correct");
 
             string actualtext = GetObject.GetDepartment(BaseData.Departmanet_Name3);
             Assert.AreEqual(BaseData.Departmanet_Name3, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
-        }
-
-        public static int employeeId;
-
-        [Test]
-        public async Task POSTEmployee()
-        {
-            var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
-            BaseMethods.DisableCheckCertificate();
-
-            var request = new RestRequest("employee/", Method.POST);
-            request.AddHeader("Accept", "application/json");
-
-            POSTOrgstructure();
-            POSTJob();
-
-            request.AddJsonBody(new
-            {
-                workernum = BaseData.Employee_Work_Num1,
-                parent = orgstructureId,
-                job = jobId,
-                first_name = BaseData.Employee_First_Name1,
-                last_name = BaseData.Employee_Last_Name1,
-                middle_name = BaseData.Employee_Middle_Name1
-                //photo = BaseData.Employee_Photo1
-            });
-
-            request.RequestFormat = DataFormat.Json;
-            var response = await BaseMethods.GetResponse(client, request);
-
-            var Employee = JsonConvert.DeserializeObject<Employee>(response.Content);
-            employeeId = Employee.id;
-            Assert.That(Employee.last_name, Is.EqualTo(BaseData.Employee_Last_Name1), "employee name is nor correct");
-
-            string actualtext = GetObject.GetEmployee(BaseData.Employee_Full_Name1);
-            Assert.AreEqual(BaseData.Employee_Full_Name1, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
-        }
-
-        public static int employeeDeleteid;
-
-        [Test]
-        public async Task POSTEmployeeForDelete()
-        {
-            var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
-            BaseMethods.DisableCheckCertificate();
-
-            var request = new RestRequest("employee/", Method.POST);
-            request.AddHeader("Accept", "application/json");
-
-            POSTOrgstructure();
-            POSTJobForDelete();
-
-            request.AddJsonBody(new
-            {
-                workernum = BaseData.Employee_Work_Num4,
-                parent = orgstructureId,
-                job = jobDeletedId,
-                first_name = BaseData.Employee_First_Name4,
-                last_name = BaseData.Employee_Last_Name4,
-                middle_name = BaseData.Employee_Middle_Name4
-                //photo = BaseData.Employee_Photo1
-            });
-
-            request.RequestFormat = DataFormat.Json;
-            var response = await BaseMethods.GetResponse(client, request);
-
-            var Employee = JsonConvert.DeserializeObject<Employee>(response.Content);
-            employeeDeleteid = Employee.id;
-            Assert.That(Employee.last_name, Is.EqualTo(BaseData.Employee_Last_Name4), "employee name is nor correct");
-
-            string actualtext = GetObject.GetEmployee(BaseData.Employee_Full_Name4);
-            Assert.AreEqual(BaseData.Employee_Full_Name4, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
         }
 
         [Test]
         public async Task GETOrgstructure()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             POSTOrgstructure();
             var request = new RestRequest("orgstructure/", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
+
             var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Orgstructure>>(response.Content);
@@ -235,18 +176,19 @@ namespace Rest_api_test_1._4
         public async Task GETOrgstructureId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("orgstructure/{orgstructureid}", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTOrgstructure();
             request.AddUrlSegment("orgstructureid", orgstructureId);
             var response = await BaseMethods.GetResponse(client, request);
 
-            var Orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
-            Assert.That(Orgstructure.name, Is.EqualTo(BaseData.Company_Name), "orgstructure name is nor correct");
+            var orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
+            Assert.That(orgstructure.name, Is.EqualTo(BaseData.Company_Name), "orgstructure name is nor correct");
 
             string actualtext = GetObject.GetCompany(BaseData.Company_Name);
             Assert.AreEqual(BaseData.Company_Name, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
@@ -256,11 +198,12 @@ namespace Rest_api_test_1._4
         public async Task PUTOrgstructureId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("orgstructure/{orgstructureid}", Method.PUT);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTOrgstructure();
             request.AddUrlSegment("orgstructureid", orgstructureId);
@@ -284,11 +227,12 @@ namespace Rest_api_test_1._4
         public async Task PUTDepartmentId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("orgstructure/{orgstructureid}", Method.PUT);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTDepartment();
             request.AddUrlSegment("orgstructureid", departmentId);
@@ -314,11 +258,12 @@ namespace Rest_api_test_1._4
         public async Task PATCHOrgstructureId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("orgstructure/{orgstructureid}", Method.PATCH);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTOrgstructure();
             request.AddUrlSegment("orgstructureid", orgstructureId);
@@ -343,11 +288,12 @@ namespace Rest_api_test_1._4
         public async Task PATCHDepartmentId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("orgstructure/{orgstructureid}", Method.PATCH);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTDepartment();
             request.AddUrlSegment("orgstructureid", departmentId);
@@ -373,11 +319,12 @@ namespace Rest_api_test_1._4
         public async Task DELETEOrgstructureId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("orgstructure/{orgstructureid}", Method.DELETE);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTCleanerOrgstructure();
             POSTOrgstructureForDelete();
@@ -396,11 +343,12 @@ namespace Rest_api_test_1._4
         public async Task DELETEDepartmentId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("orgstructure/{orgstructureid}", Method.DELETE);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTDepartmentForDelete();
             request.AddUrlSegment("orgstructureid", departmentDeleteId);
@@ -413,16 +361,94 @@ namespace Rest_api_test_1._4
             Assert.IsEmpty(actualtext, "В БД studio название name of orgstructure имеет некорректное название");
         }
 
+        public static int employeeId;
+
+        [Test]
+        public async Task POSTEmployee()
+        {
+            var client = new RestClient("https://localhost:8088/api/v1/");
+            BaseMethods.DisableCheckCertificate();
+
+            var request = new RestRequest("employee/", Method.POST);
+            request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
+
+            POSTOrgstructure();
+            POSTJob();
+
+            request.AddJsonBody(new
+            {
+                workernum = BaseData.Employee_Work_Num1,
+                parent = orgstructureId,
+                job = jobId,
+                first_name = BaseData.Employee_First_Name1,
+                last_name = BaseData.Employee_Last_Name1,
+                middle_name = BaseData.Employee_Middle_Name1,
+                photo = BaseData.Employee_Photo_Malkovich
+            });
+
+            request.RequestFormat = DataFormat.Json;
+            var response = await BaseMethods.GetResponse(client, request);
+
+            var employee = JsonConvert.DeserializeObject<Employee>(response.Content);
+            employeeId = employee.id;
+            Assert.That(employee.last_name, Is.EqualTo(BaseData.Employee_Last_Name1), "employee name is nor correct");
+
+            string actualtext = GetObject.GetEmployee(BaseData.Employee_Full_Name1);
+            Assert.AreEqual(BaseData.Employee_Full_Name1, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
+        }
+
+        public static int employeeDeleteid;
+
+        [Test]
+        public async Task POSTEmployeeForDelete()
+        {
+            var client = new RestClient("https://localhost:8088/api/v1/");
+            BaseMethods.DisableCheckCertificate();
+
+            var request = new RestRequest("employee/", Method.POST);
+            request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
+
+            POSTOrgstructure();
+            POSTJobForDelete();
+
+            request.AddJsonBody(new
+            {
+                workernum = BaseData.Employee_Work_Num4,
+                parent = orgstructureId,
+                job = jobDeletedId,
+                first_name = BaseData.Employee_First_Name4,
+                last_name = BaseData.Employee_Last_Name4,
+                middle_name = BaseData.Employee_Middle_Name4,
+                photo = BaseData.Employee_Photo_Sogdian
+            });
+
+            request.RequestFormat = DataFormat.Json;
+            var response = await BaseMethods.GetResponse(client, request);
+
+            var employee = JsonConvert.DeserializeObject<Employee>(response.Content);
+            employeeDeleteid = employee.id;
+            Assert.That(employee.last_name, Is.EqualTo(BaseData.Employee_Last_Name4), "employee name is nor correct");
+
+            string actualtext = GetObject.GetEmployee(BaseData.Employee_Full_Name4);
+            Assert.AreEqual(BaseData.Employee_Full_Name4, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
+        }
+
         [Test]
         public async Task GETEmployee()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             POSTEmployee();
             var request = new RestRequest("employee/", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
+
             var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Employee>>(response.Content);
@@ -438,11 +464,12 @@ namespace Rest_api_test_1._4
         public async Task GETEmployeeId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("employee/{employeeid}", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTEmployee();
             request.AddUrlSegment("employeeid", employeeId);
@@ -459,15 +486,14 @@ namespace Rest_api_test_1._4
         public async Task PUTEmployeeId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("employee/{employeeid}", Method.PUT);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
-            POSTOrgstructure();
             POSTEmployee();
-            POSTJob();
             request.AddUrlSegment("employeeid", employeeId);
 
             request.AddJsonBody(new
@@ -477,6 +503,7 @@ namespace Rest_api_test_1._4
                 last_name = BaseData.Employee_Last_Name2,
                 middle_name = BaseData.Employee_Middle_Name2,
                 workernum = BaseData.Employee_Work_Num2,
+                photo = BaseData.Employee_Photo_Ien,
                 job = jobId
             });
 
@@ -494,11 +521,12 @@ namespace Rest_api_test_1._4
         public async Task PATCHEmployeeId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("employee/{employeeid}", Method.PATCH);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTEmployee();
             request.AddUrlSegment("employeeid", employeeId);
@@ -510,6 +538,7 @@ namespace Rest_api_test_1._4
                 parent = orgstructureId,
                 middle_name = BaseData.Employee_Middle_Name3,
                 workernum = BaseData.Employee_Work_Num3,
+                photo = BaseData.Employee_Photo_Kalkin,
                 job = jobId
             });
 
@@ -527,11 +556,12 @@ namespace Rest_api_test_1._4
         public async Task DELETEEmployeeId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("employee/{employeeid}", Method.DELETE);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTCleanerEmployee();
             POSTEmployeeForDelete();
@@ -544,7 +574,7 @@ namespace Rest_api_test_1._4
             string actualtext = GetObject.GetDeletedEmployee(BaseData.Employee_Full_Name4);
             Assert.IsEmpty(actualtext, "В БД studio название name of orgstructure имеет некорректное название");
         }
-        
+
         public static int jobId;
         public static string jobName;
 
@@ -552,11 +582,12 @@ namespace Rest_api_test_1._4
         public async Task POSTJob()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("job/", Method.POST);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             request.AddJsonBody(new
             {
@@ -583,11 +614,12 @@ namespace Rest_api_test_1._4
         public async Task POSTJobForDelete()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("job/", Method.POST);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             request.AddJsonBody(new
             {
@@ -613,11 +645,12 @@ namespace Rest_api_test_1._4
         public async Task POSTJobForDelete2()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("job/", Method.POST);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             request.AddJsonBody(new
             {
@@ -641,12 +674,14 @@ namespace Rest_api_test_1._4
         public async Task GETJob()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             POSTJob();
             var request = new RestRequest("job/", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
+
             var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Job>>(response.Content);
@@ -661,11 +696,12 @@ namespace Rest_api_test_1._4
         public async Task GETJobId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("job/{jobid}", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTJob();
             request.AddUrlSegment("jobid", jobId);
@@ -682,11 +718,12 @@ namespace Rest_api_test_1._4
         public async Task DELETEJobId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("job/{jobid}", Method.DELETE);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTCleanerJob();
             POSTJobForDelete();
@@ -708,11 +745,13 @@ namespace Rest_api_test_1._4
         public async Task GETUser()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("users/", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
+
             var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<User>>(response.Content);
@@ -730,11 +769,12 @@ namespace Rest_api_test_1._4
         public async Task GETUserId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("users/{usersid}", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             GETUser();
             request.AddUrlSegment("usersid", userId);
@@ -751,13 +791,14 @@ namespace Rest_api_test_1._4
         public async Task GETUserIdPermissions()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             GETUser();
-            
+
             var request = new RestRequest("users/{userid}/permissions", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             request.AddUrlSegment("userid", userId);
             request.RequestFormat = DataFormat.Json;
@@ -767,8 +808,8 @@ namespace Rest_api_test_1._4
             for (int i = 0; i < UserPermissions.Length; i++)
             {
                 string actualtext = GetObject.GetUserName(BaseData.UserRoot);
-                Assert.AreEqual(BaseData.UserRoot, actualtext, "В БД studio название name of orgstructure имеет некорректное название");  
-            } 
+                Assert.AreEqual(BaseData.UserRoot, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
+            }
         }
 
         public static int deviceid;
@@ -777,17 +818,19 @@ namespace Rest_api_test_1._4
         public async Task GETDevices()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("devices/", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
+
             var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Devices>>(response.Content);
-            var port = rootObject.results[0].port;
+            var timezoneid = rootObject.results[0].timezoneid;
             deviceid = rootObject.results[0].id;
-            Assert.That(port, Is.EqualTo(BaseData.Device_Port), "user name is nor correct");
+            Assert.That(timezoneid, Is.EqualTo(BaseData.Timezone_Id), "user name is nor correct");
 
             string actualtext = GetObject.GetDevice(BaseData.Device_Type);
             Assert.AreEqual(BaseData.Device_Type, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
@@ -797,18 +840,19 @@ namespace Rest_api_test_1._4
         public async Task GETDevicesId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("devices/{deviceid}", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             GETDevices();
             request.AddUrlSegment("deviceid", deviceid);
             var response = await BaseMethods.GetResponse(client, request);
 
             var Devices = JsonConvert.DeserializeObject<Devices>(response.Content);
-            Assert.That(Devices.port, Is.EqualTo(BaseData.Device_Port), "user name is nor correct");
+            Assert.That(Devices.timezoneid, Is.EqualTo(BaseData.Timezone_Id), "user name is nor correct");
 
             string actualtext = GetObject.GetDevice(BaseData.Device_Type);
             Assert.AreEqual(BaseData.Device_Type, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
@@ -821,11 +865,13 @@ namespace Rest_api_test_1._4
         public async Task GETCheckpoint()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("checkpoint", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
+
             var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Checkpoint>>(response.Content);
@@ -835,19 +881,18 @@ namespace Rest_api_test_1._4
 
             string actualtext = GetObject.GetCheckpoint(BaseData.Checkpoint_Name);
             Assert.AreEqual(BaseData.Checkpoint_Name, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
-
-
         }
 
         [Test]
         public async Task GETCheckpointId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("checkpoint/{checkpointid}", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             GETCheckpoint();
             request.AddUrlSegment("checkpointid", checkpointid);
@@ -862,6 +907,8 @@ namespace Rest_api_test_1._4
 
         public static string eventTime;
 
+        //Нужно создать сотрудника и связанного пользлователя test@mail.ru с паролем 1
+        /*
         [Test]
         public async Task POSTCheckpointIdEvent()
         {
@@ -888,6 +935,7 @@ namespace Rest_api_test_1._4
             string actualtext = GetObject.GetCheckpoint(BaseData.Checkpoint_Name);
             Assert.AreEqual(BaseData.Checkpoint_Name, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
         }
+        */
 
         public static int reportid;
         public static dynamic reportArr;
@@ -896,11 +944,12 @@ namespace Rest_api_test_1._4
         public async Task GETReport()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("report/", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             var response = await BaseMethods.GetResponse(client, request);
 
@@ -918,7 +967,6 @@ namespace Rest_api_test_1._4
         public async Task GETReportId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             GETReport();
@@ -928,6 +976,9 @@ namespace Rest_api_test_1._4
                 request.AddUrlSegment("reportid", report.id);
 
                 request.AddHeader("Accept", "application/json");
+                POSTAuthLogin();
+                request.AddHeader("Authorization", "Token " + token);
+
                 var response = await BaseMethods.GetResponse(client, request);
 
                 var reportresult = JsonConvert.DeserializeObject<Report>(response.Content);
@@ -942,11 +993,12 @@ namespace Rest_api_test_1._4
         public async Task POSTCleanerJob()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("cleaner/job/", Method.POST);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             request.AddJsonBody(new
             {
@@ -968,11 +1020,12 @@ namespace Rest_api_test_1._4
         public async Task POSTCleanerEmployee()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("cleaner/employee/", Method.POST);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             request.AddJsonBody(new
             {
@@ -994,11 +1047,12 @@ namespace Rest_api_test_1._4
         public async Task POSTCleanerOrgstructure()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("cleaner/orgstructure/", Method.POST);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             request.AddJsonBody(new
             {
@@ -1025,14 +1079,14 @@ namespace Rest_api_test_1._4
             client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
-            GETUser();
             var request = new RestRequest("auth/login", Method.POST);
             request.AddHeader("Accept", "application/json");
+            request.RequestFormat = DataFormat.Json;
             var response = await BaseMethods.GetResponse(client, request);
 
             var Login = JsonConvert.DeserializeObject<Login>(response.Content);
             token = Login.token;
-            Assert.That(Login.user_id, Is.EqualTo(userId), "report name is nor correct");
+            //Assert.That(Login.user_id, Is.EqualTo(userId), "report name is nor correct");
 
             string actualtext = GetObject.GetUserId(BaseData.UserRootId);
             Assert.AreEqual(BaseData.UserRootId, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
@@ -1057,20 +1111,22 @@ namespace Rest_api_test_1._4
         public async Task GETLogs()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
-            POSTCheckpointIdEvent();
+            //POSTCheckpointIdEvent();
             var request = new RestRequest("logs/", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
+
             var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Logs>>(response.Content);
-            var name = rootObject.results[0].time;
+            var time = rootObject.results[0].time;
             eventId = rootObject.results[0].id;
 
-            string actualtext = GetObject.GetLog(BaseData.Checkpoint_Time);
-            Assert.AreEqual(BaseData.Checkpoint_Time2, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
+            //string actualtext = GetObject.GetLog(BaseData.Checkpoint_Time);
+            //Assert.AreEqual(BaseData.Checkpoint_Time2, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
         }
 
         [Test]
@@ -1084,12 +1140,15 @@ namespace Rest_api_test_1._4
             var request = new RestRequest("logs/{logsid}/", Method.GET);
             request.AddUrlSegment("logsid", eventId);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
+
             var response = await BaseMethods.GetResponse(client, request);
 
             var Logs = JsonConvert.DeserializeObject<Logs>(response.Content);
 
-            string actualtext = GetObject.GetLog(BaseData.Checkpoint_Time);
-            Assert.AreEqual(BaseData.Checkpoint_Time2, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
+            //string actualtext = GetObject.GetLog(BaseData.Checkpoint_Time);
+            //Assert.AreEqual(BaseData.Checkpoint_Time2, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
         }
 
         public static int templId;
@@ -1098,12 +1157,14 @@ namespace Rest_api_test_1._4
         public async Task GETTempl()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             POSTEmployee();
             var request = new RestRequest("templ/", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
+
             var response = await BaseMethods.GetResponse(client, request);
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Templ>>(response.Content);
@@ -1118,7 +1179,6 @@ namespace Rest_api_test_1._4
         public async Task GETTemplId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             POSTEmployee();
@@ -1126,6 +1186,9 @@ namespace Rest_api_test_1._4
             var request = new RestRequest("templ/{templid}/", Method.GET);
             request.AddUrlSegment("templid", templId);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
+
             var response = await BaseMethods.GetResponse(client, request);
 
             var Templ = JsonConvert.DeserializeObject<Templ>(response.Content);
@@ -1142,11 +1205,12 @@ namespace Rest_api_test_1._4
         public async Task POSTWorktimePresence()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("worktime/presence/", Method.POST);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTEmployee();
 
@@ -1166,11 +1230,12 @@ namespace Rest_api_test_1._4
         public async Task GETWorktimePresenceResult()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("worktime/presence/result", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTWorktimePresence();
             request.AddParameter("uuid", uuidId);
@@ -1189,11 +1254,12 @@ namespace Rest_api_test_1._4
         public async Task GETWorktimeStatus()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             var request = new RestRequest("worktime/status/", Method.GET);
             request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
 
             POSTWorktimePresence();
             request.AddParameter("uuid", uuidId);
@@ -1206,6 +1272,98 @@ namespace Rest_api_test_1._4
             var detail = Status.detail;
             Assert.AreEqual(status, 2);
             Assert.AreEqual(detail, "");
+        }
+
+        [Test]
+        public async Task DELETEWorktimePresenceResult()
+        {
+            var client = new RestClient("https://localhost:8088/api/v1/");
+            BaseMethods.DisableCheckCertificate();
+
+            var request = new RestRequest("worktime/presence/result/", Method.DELETE);
+            request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
+
+            POSTWorktimePresence();
+
+            request.AddParameter("uuid", uuidId);
+            var newUuidId = uuidId;
+            request.RequestFormat = DataFormat.Json;
+            var response = await BaseMethods.GetResponse(client, request);
+
+            //проверка удаления uuid
+            var newrequest = new RestRequest("worktime/status/", Method.GET);
+            newrequest.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            newrequest.AddHeader("Authorization", "Token " + token);
+            newrequest.AddParameter("uuid", newUuidId);
+
+            newrequest.RequestFormat = DataFormat.Json;
+            var newresponse = await BaseMethods.GetResponse(client, newrequest);
+
+            var status = JsonConvert.DeserializeObject<Status>(newresponse.Content);
+            var newstatus = status.status;
+            var newdetail = status.detail;
+            Assert.AreEqual(newstatus, 0);
+            Assert.AreEqual(newdetail, "uuid not exists");
+        }
+
+        [Test]
+        public async Task GETSystemSettings()
+        {
+            var client = new RestClient("https://localhost:8088/api/v1/");
+            BaseMethods.DisableCheckCertificate();
+
+            var request = new RestRequest("system/settings/", Method.GET);
+            request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
+
+            var response = await BaseMethods.GetResponse(client, request);
+
+            var settings = JsonConvert.DeserializeObject<Settings>(response.Content);
+            var locate = settings.locale;
+            Assert.AreEqual(locate, BaseData.Locate, "locate is not 'ru'");
+        }
+
+        [Test]
+        public async Task POSTReportGenerate()
+        {
+            var client = new RestClient("https://localhost:8088/api/v1");
+            BaseMethods.DisableCheckCertificate();
+
+            var request = new RestRequest("report/generate", Method.POST);
+            request.AddHeader("Accept", "application/json");
+            POSTAuthLogin();
+            request.AddHeader("Authorization", "Token " + token);
+
+            GETReport();
+            POSTEmployee();
+            /*
+            request.AddJsonBody(new
+            {
+                report_id = reportid,
+                locale = BaseData.Report_Locate,
+                format = BaseData.Report_Format,
+                params 
+                    {
+                    d_date_beg = BaseData.Report_Date_Beg, 
+                    d_date_end = BaseData.Report_Date_End, 
+                    a_workers = [employeeId]
+                    }
+            });
+            */
+
+            /* ИЛИ
+            request.AddFile("ReportGenerate", @"E:\Работа\Workplace\RestApi\RestApi\bin\Debug\Json\ReportGenerate.json");
+
+            request.RequestFormat = DataFormat.Json;
+            var response = await BaseMethods.GetResponse(client, request);
+
+            var ReportUuid = JsonConvert.DeserializeObject<ReportUuid>(response.Content);
+            var uuid = ReportUuid.uuid;
+            */
         }
     }
 }
