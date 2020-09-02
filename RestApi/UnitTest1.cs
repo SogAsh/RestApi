@@ -17,7 +17,7 @@ namespace Rest_api_test_1._4
     {
         /// <Подготовка>
         ///Выполните действия ниже для корректной работы методов (раскомментируйте методы если они закомментированы)
-        //////Установите пароль в Biosmart studio = 0
+        ///Установите пароль в Biosmart studio = 0
         ///Добавить терминал в Biosmart studio (не фейк) для GETDevices()
         ///Создать виртуальную проходную в Biosmart studio с именем "Проходная" для GETCheckpoint()
         ///Нужно создать сотрудника и связанного пользлователя test@mail.ru с паролем 1 для POSTCheckpointIdEvent()
@@ -32,7 +32,6 @@ namespace Rest_api_test_1._4
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
             BaseMethods.DisableCheckCertificate();
-
             var request = new RestRequest("orgstructure/", Method.POST);
             request.AddHeader("Accept", "application/json");
             POSTAuthLogin();
@@ -47,15 +46,17 @@ namespace Rest_api_test_1._4
             request.RequestFormat = DataFormat.Json;
             var response = await BaseMethods.GetResponse(client, request);
 
+            
             var orgstructure = JsonConvert.DeserializeObject<Orgstructure>(response.Content);
             orgstructureId = orgstructure.id;
             orgstructureName = orgstructure.name;
-            Assert.That(orgstructure.name, Is.EqualTo(BaseData.Company_Name), "orgstructure name is nor correct");
+
+            Assert.That(orgstructure.name, Is.EqualTo(BaseData.Company_Name), "orgstructure name is not correct");
 
             string actualtext = GetObject.GetCompany(BaseData.Company_Name);
             Assert.AreEqual(BaseData.Company_Name, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
         }
-
+        
         public static int departmentId;
 
         [Test]
@@ -686,7 +687,6 @@ namespace Rest_api_test_1._4
 
             var rootObject = JsonConvert.DeserializeObject<RootObject<Job>>(response.Content);
             var name = rootObject.results[0].name;
-            //Assert.That(name, Is.EqualTo(jobName), "job name is nor correct"); не сработает, т.е. в массиве много name
 
             string actualtext = GetObject.GetPosition(jobName);
             Assert.AreEqual(jobName, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
@@ -860,7 +860,7 @@ namespace Rest_api_test_1._4
         }
 
         public static int checkpointid;
-        //Создать виртуальную проходную в Biosmart studio с именем "Проходная"
+        /* Создать виртуальную проходную в Biosmart studio с именем "Проходная", т.к. нет метода POSTCheckpoint()
         [Test]
         public async Task GETCheckpoint()
         {
@@ -904,10 +904,10 @@ namespace Rest_api_test_1._4
             string actualtext = GetObject.GetCheckpoint(BaseData.Checkpoint_Name);
             Assert.AreEqual(BaseData.Checkpoint_Name, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
         }
-
+        */
         public static string eventTime;
 
-        //Нужно создать сотрудника и связанного пользлователя test@mail.ru с паролем 1
+        //Нужно создать сотрудника в Biosmart studio и связанного пользователя test@mail.ru с паролем 1, т.к. нет методов по добавлению
         /*
         [Test]
         public async Task POSTCheckpointIdEvent()
@@ -1086,7 +1086,6 @@ namespace Rest_api_test_1._4
 
             var Login = JsonConvert.DeserializeObject<Login>(response.Content);
             token = Login.token;
-            //Assert.That(Login.user_id, Is.EqualTo(userId), "report name is nor correct");
 
             string actualtext = GetObject.GetUserId(BaseData.UserRootId);
             Assert.AreEqual(BaseData.UserRootId, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
@@ -1125,15 +1124,14 @@ namespace Rest_api_test_1._4
             var time = rootObject.results[0].time;
             eventId = rootObject.results[0].id;
 
-            //string actualtext = GetObject.GetLog(BaseData.Checkpoint_Time);
-            //Assert.AreEqual(BaseData.Checkpoint_Time2, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
+            string actualtext = GetObject.GetLog(eventId.ToString());
+            Assert.AreEqual(BaseData.Checkpoint_Log, Convert.ToInt32(actualtext));
         }
 
         [Test]
         public async Task GETLogsId()
         {
             var client = new RestClient("https://localhost:8088/api/v1/");
-            client.Authenticator = new HttpBasicAuthenticator("root", "0");
             BaseMethods.DisableCheckCertificate();
 
             GETLogs();
@@ -1147,8 +1145,8 @@ namespace Rest_api_test_1._4
 
             var Logs = JsonConvert.DeserializeObject<Logs>(response.Content);
 
-            //string actualtext = GetObject.GetLog(BaseData.Checkpoint_Time);
-            //Assert.AreEqual(BaseData.Checkpoint_Time2, actualtext, "В БД studio название name of orgstructure имеет некорректное название");
+            string actualtext = GetObject.GetLog(eventId.ToString());
+            Assert.AreEqual(BaseData.Checkpoint_Log, Convert.ToInt32(actualtext));
         }
 
         public static int templId;
@@ -1224,30 +1222,6 @@ namespace Rest_api_test_1._4
 
             var Worktime = JsonConvert.DeserializeObject<Worktime>(response.Content);
             uuidId = Worktime.uuid;
-        }
-
-        [Test]
-        public async Task GETWorktimePresenceResult()
-        {
-            var client = new RestClient("https://localhost:8088/api/v1/");
-            BaseMethods.DisableCheckCertificate();
-
-            var request = new RestRequest("worktime/presence/result", Method.GET);
-            request.AddHeader("Accept", "application/json");
-            POSTAuthLogin();
-            request.AddHeader("Authorization", "Token " + token);
-
-            POSTWorktimePresence();
-            request.AddParameter("uuid", uuidId);
-
-            request.RequestFormat = DataFormat.Json;
-            var response = await BaseMethods.GetResponse(client, request);
-
-            var Summary = JsonConvert.DeserializeObject<Summary>(response.Content);
-            var totalCount = Summary.total_count.ToString();
-
-            var actualtext = GetObject.GetEmployeeSum();
-            //Assert.AreEqual(totalCount, actualtext);
         }
 
         [Test]
@@ -1340,7 +1314,7 @@ namespace Rest_api_test_1._4
 
             GETReport();
             POSTEmployee();
-            /*
+            /* Передача параметров в запросе
             request.AddJsonBody(new
             {
                 report_id = reportid,

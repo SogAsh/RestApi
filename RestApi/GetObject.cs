@@ -127,7 +127,7 @@ namespace Rest_api_test_1._4
 
 		public static string GetLog(string dbValue) //get name of User Name
 		{
-			string returnQuery = BaseMethods.GetDataFromDb("select time from restapi.log where time = '" + dbValue + "'");
+			string returnQuery = BaseMethods.GetDataFromDb("select id from restapi.log where id = '" + dbValue + "'");
 
 			if (returnQuery == string.Empty)
 			{

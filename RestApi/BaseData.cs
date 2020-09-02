@@ -112,8 +112,8 @@ namespace Rest_api_test_1._4
 		#region Checkpoint
 		public const string Checkpoint_Name = "Проходная";
 		public const int Checkpoint_Direction = 1;
-		public const string Checkpoint_Time = "2020-05-03T15:00"; //"2020-05-03 15:00:00"
-		public const string Checkpoint_Time2 = "Вс.03.05.2020 15:00:00";
+		public const string Checkpoint_Log = "1";
+		
 		#endregion
 
 		#region Report
